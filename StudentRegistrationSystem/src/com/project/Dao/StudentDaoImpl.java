@@ -4,8 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.project.bean.Course;
 import com.project.bean.Student;
+import com.project.exceptions.CourseException;
 import com.project.exceptions.StudentException;
 import com.project.utility.DBUtil;
 
@@ -120,6 +124,80 @@ public class StudentDaoImpl implements StudentDao{
 		}
 		
 		return student;
+		
+	}
+
+	@Override
+	public Student getStudentObj() {
+
+		Student student = null;
+		
+		try(Connection conn = DBUtil.provideConnection()) {
+			
+			
+			PreparedStatement ps= conn.prepareStatement("select * from student where roll = ?");			
+			
+			ps.setInt(1, studentloggedin);
+			
+			
+			ResultSet rs= ps.executeQuery();
+			
+			
+				if(rs.next()) {
+				
+				int r = rs.getInt("roll");
+				String n= rs.getString("name");
+				String e= rs.getString("email");
+				String p= rs.getString("password");
+				String c = rs.getString("coursename");
+				
+				
+			student=new Student(r, n, e, p, c);	
+			
+		}
+				
+		}catch (SQLException e) {
+			
+			student = null;
+		}
+		
+		return student;
+		
+	}
+
+	@Override
+	public List<Student> getAllStudents() throws StudentException {
+		
+		List<Student> studentList = new ArrayList<>();
+		
+		try (Connection conn = DBUtil.provideConnection()){
+			
+			PreparedStatement ps = conn.prepareStatement("Select * from student");
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				int roll = rs.getInt("roll");
+				String n = rs.getString("name");
+				
+				
+				Student student = new Student();
+				student.setName(n);
+				student.setRoll(roll);
+				
+				studentList.add(student);
+			
+			}
+			
+		} catch (SQLException e) {
+			throw new StudentException(e.getMessage());
+		}
+		
+		if (studentList.isEmpty()) {
+			throw new StudentException("No student data found");
+		}
+		
+		return studentList;
 		
 	}
 

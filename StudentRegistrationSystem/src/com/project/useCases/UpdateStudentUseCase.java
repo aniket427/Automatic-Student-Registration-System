@@ -12,7 +12,7 @@ public class UpdateStudentUseCase {
 		
 		StudentDao dao = new StudentDaoImpl();
 		
-		Student student = new Student();
+		Student student = dao.getStudentObj();
 		
 		Scanner sc= new Scanner(System.in);
 		
@@ -22,30 +22,38 @@ public class UpdateStudentUseCase {
 		
 		if(updateName.equalsIgnoreCase("y")) {
 			
-			System.out.println("Enter updated name");
+			System.out.println("Enter new name");
 			
 			String sname = sc.next();
 			student.setName(sname);
 			
-		} else {
-			sc.nextLine();
-		}
+		} 
 		
+		System.out.println("Do you want to update your password? y/n");
 		
-
-		System.out.println("Enter updated password");
-		String pass = sc.next();
+		String updatePass=sc.next();
 		
+		if(updatePass.equalsIgnoreCase("y")) {
+			
+			System.out.println("Enter new name");
+			
+			String pass = sc.next();
+			student.setPassword(pass);
+			
+		} 
 		
-		System.out.println("Enter new course you wish to opt in");
-		String cname = sc.next();
+		System.out.println("Do you want to update your course? y/n");
 		
+		String updateCourse=sc.next();
 		
-		
-		
-		
-		student.setPassword(pass);
-		student.setCourse(cname);
+		if(updateCourse.equalsIgnoreCase("y")) {
+			
+			System.out.println("Enter new course name:");
+			
+			String course = sc.next();
+			student.setCourse(course);
+			
+		} 
 		
 		  
 		String result = dao.updateStudent(student);

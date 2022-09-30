@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.project.bean.Course;
+import com.project.bean.CourseDTO;
+import com.project.bean.Student;
+import com.project.bean.StudentDTO;
 import com.project.exceptions.CourseException;
 import com.project.exceptions.StudentException;
 import com.project.utility.DBUtil;
@@ -106,11 +109,10 @@ try (Connection conn= DBUtil.provideConnection()){
 		} catch (SQLException e) {
 			e.getMessage();
 		}
-		
-		
-		
+			
 		return message;
 	}
+	
 
 	@Override
 	public String deleteCourse(String cname, int batch) {
@@ -308,5 +310,129 @@ String message = "Batch addition failed.";
 		return courseList;
 	
 	}
+
+	@Override
+	public String updateTotalSeats(String cname, int batch, int totalSeats) throws CourseException {
+		
+			String message = "Batch "+ batch +" for "+cname+" course not found.";
+		
+		
+		
+		try (Connection conn = DBUtil.provideConnection()){
+			
+			PreparedStatement ps =
+					conn.prepareStatement("UPDATE course SET totalseats = ? where cname = ? AND batch = ?");
+					
+				ps.setInt(1, totalSeats);
+				ps.setString(2, cname);
+				ps.setInt(3, batch);
+				
+			int x = ps.executeUpdate();
+			
+			if(x>0) {
+				message = "Total seats for "+cname+" course "+batch+" batch have been updated";
+			} else {
+				throw new CourseException("Invalid Course...");
+			}
+					
+		} catch (SQLException e) {
+			e.getMessage();
+		}
+		
+		return message;
+
+	}
+
+	@Override
+	public List<StudentDTO> getBatchwiseStudents() throws CourseException {
+		
+		List<StudentDTO> dtos = new ArrayList<>();
+		
+		
+
+		try (Connection conn = DBUtil.provideConnection()){
+			
+			PreparedStatement ps= conn.prepareStatement(" select c.cid,c.cname,c.batch, s.roll, s.name,s.email,c.fee from  student s INNER JOIN course c INNER JOIN course_student cs ON s.roll = cs.roll AND c.cid = cs.cid order by c.cname,c.batch,s.roll");
+			
+			
+			ResultSet rs= ps.executeQuery();
+			
+			while(rs.next()) {
+				
+				int cid = rs.getInt("cid");
+				String cname = rs.getString("cname");
+				int batch = rs.getInt("batch");
+				int roll = rs.getInt("roll");
+				String name = rs.getString("email");
+				String email = rs.getString("email");
+				int fee = rs.getInt("fee");
+					
+				StudentDTO dto = new StudentDTO(roll, email, name, cname, cid, batch, fee);
+				
+				dtos.add(dto);
+				
+				
+			}
+		
+			
+		} catch (SQLException e) {
+			throw new CourseException(e.getMessage());
+		}
+		
+		
+		
+		if(dtos.isEmpty())
+			throw new CourseException("No active courses found");
+		
+		
+		return dtos;
+		
+	}
+
+	@Override
+	public List<CourseDTO> seatAvailability() throws CourseException {
+		
+		List<CourseDTO> dtos = new ArrayList<>();
+		
+try (Connection conn = DBUtil.provideConnection()){
+			
+			PreparedStatement ps= conn.prepareStatement("select course.cid, count(course_student.cid) as count, course.cname, course.batch, course.fee, course.totalseats from course left join course_student on course.cid=course_student.cid group by cid");
+			
+			
+			ResultSet rs= ps.executeQuery();
+			
+			while(rs.next()) {
+				
+				 int cid = rs.getInt("cid");
+				 String cname = rs.getString("cname");
+				 int batch = rs.getInt("batch");
+				 int fee = rs.getInt("fee");
+				 int totalseats = rs.getInt("totalseats");
+				 int seatsfilled = rs.getInt("count");
+				 int seatsAvailable = totalseats - seatsfilled;
+				
+					
+				CourseDTO dto = new CourseDTO(cid, cname, batch, fee, totalseats, seatsfilled, seatsAvailable);
+				
+				dtos.add(dto);
+				
+				
+			}
+		
+			
+		} catch (SQLException e) {
+			throw new CourseException(e.getMessage());
+		}
+		
+		
+		
+		if(dtos.isEmpty())
+			throw new CourseException("No active courses found");
+		
+		
+		return dtos;
+	}
+
+	
 
 }

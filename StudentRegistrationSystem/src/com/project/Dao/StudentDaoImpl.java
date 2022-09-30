@@ -6,10 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.project.bean.Course;
 import com.project.bean.Student;
-import com.project.exceptions.CourseException;
 import com.project.exceptions.StudentException;
 import com.project.utility.DBUtil;
 

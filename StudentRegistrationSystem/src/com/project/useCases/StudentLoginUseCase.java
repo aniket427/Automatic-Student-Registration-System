@@ -10,7 +10,7 @@ import com.project.exceptions.StudentException;
 public class StudentLoginUseCase {
 	
 
-	public static void main(String[] args) {
+	public static boolean main(String[] args) {
 		
 		
 		Scanner sc= new Scanner(System.in);
@@ -27,11 +27,13 @@ public class StudentLoginUseCase {
 			Student student= dao.loginStudent(uname, pass);
 		
 	 		System.out.println("Welcome Student :"+student.getName());
+	 		return true;
 	 	
 	 	
 		}catch (StudentException e) {
 			System.out.println(e.getMessage());
 		}
 		
+		return false;
 	}
 }

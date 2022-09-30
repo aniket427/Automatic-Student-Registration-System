@@ -5,6 +5,7 @@ import java.util.Scanner;
 import com.project.Dao.CourseDao;
 import com.project.Dao.CourseDaoImpl;
 import com.project.bean.Course;
+import com.project.exceptions.CourseException;
 
 public class AddBatchUseCase {
 
@@ -37,7 +38,13 @@ public class AddBatchUseCase {
 			course.setFee(fee);
 			course.setTotalseats(totalseats);
 			  
-			String result = dao.addCourse(course);
+			String result="Batch addition failed";
+			try {
+				result = dao.addBatch(course);
+			} catch (CourseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 			System.out.println(result);
 

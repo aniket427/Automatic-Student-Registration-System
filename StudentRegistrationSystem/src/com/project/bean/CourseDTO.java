@@ -117,8 +117,8 @@ public class CourseDTO {
 
 	@Override
 	public String toString() {
-		return "CourseId: " + cid + " Course name: " + cname + " Batch :" + batch + "\nTotal Seats: "
-				+ totalseats + " Seats Filled: " + seatsfilled + " Seats Available: " + seatsAvailable;
+		return "CourseId: " + cid + "      Course name: " + cname + "    Batch :" + batch + "\nTotal Seats: "
+				+ totalseats + "   Seats Filled: " + seatsfilled + "   Seats Available: " + seatsAvailable;
 	}
 	
 	

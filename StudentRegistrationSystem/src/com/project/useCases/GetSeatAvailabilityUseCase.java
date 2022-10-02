@@ -17,6 +17,7 @@ public class GetSeatAvailabilityUseCase {
 			List<CourseDTO> courseList = dao.seatAvailability();     
 			
 			System.out.println("Following are the courses running with seat availability");
+			System.out.println("================================================================================");
 			courseList.forEach(course ->{ System.out.println(course);
 			System.out.println("--------------------------------------------------------------------------------");	
 			});

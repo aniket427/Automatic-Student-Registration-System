@@ -35,7 +35,7 @@ public class UpdateStudentUseCase {
 		
 		if(updatePass.equalsIgnoreCase("y")) {
 			
-			System.out.println("Enter new name");
+			System.out.println("Enter new password");
 			
 			String pass = sc.next();
 			student.setPassword(pass);

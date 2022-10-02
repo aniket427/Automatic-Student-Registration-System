@@ -56,7 +56,7 @@ public class CourseDaoImpl implements CourseDao {
 		
 		int lastbatch = 0;
 		
-try (Connection conn= DBUtil.provideConnection()){
+		try (Connection conn= DBUtil.provideConnection()){
 			
 			PreparedStatement ps= conn.prepareStatement("select count(*) from course where cname=?");
 			
@@ -184,7 +184,7 @@ try (Connection conn= DBUtil.provideConnection()){
 	@Override
 	public String addBatch(Course course) throws CourseException {
 		
-String message = "Batch addition failed.";
+		String message = "Batch addition failed.";
 		
 		
 		try (Connection conn = DBUtil.provideConnection()){
@@ -216,7 +216,7 @@ String message = "Batch addition failed.";
 
 	@Override
 	public String allocateStudent(int roll, int cid) throws CourseException, StudentException {
-		String message ="Not Resgistered";
+		String message ="Not Registered";
 		
 		
 		try(Connection conn= DBUtil.provideConnection()) {
@@ -363,7 +363,7 @@ String message = "Batch addition failed.";
 				String cname = rs.getString("cname");
 				int batch = rs.getInt("batch");
 				int roll = rs.getInt("roll");
-				String name = rs.getString("email");
+				String name = rs.getString("name");
 				String email = rs.getString("email");
 				int fee = rs.getInt("fee");
 					
